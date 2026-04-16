@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CHIIP NEBULA STRESSER</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; }
+        input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 10px; width: 300px; }
+        button { background: #0f0; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        #stats { margin-top: 20px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h1>[ CHIIP NEBULA SYSTEM ]</h1>
+    <input type="text" id="url" placeholder="https://target.com">
+    <button onclick="start()">START FLOOD</button>
+    <button onclick="stop()" style="background: red;">STOP</button>
+    <div id="stats">Requests Sent: <span id="count">0</span></div>
+
+    <script>
+        function start() {
+            fetch('/start', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: document.getElementById('url').value})
+            });
+        }
+        function stop() { fetch('/stop', {method: 'POST'}); }
+        setInterval(() => {
+            fetch('/stats').then(r => r.json()).then(data => {
+                document.getElementById('count').innerText = data.requests_sent;
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
